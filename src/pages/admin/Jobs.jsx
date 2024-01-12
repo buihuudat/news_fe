@@ -30,8 +30,6 @@ const Popup = () => {
   );
 };
 
-console.log();
-
 const Jobs = () => {
   const { data, isLoading } = useGetJobsQuery();
   return isLoading ? (

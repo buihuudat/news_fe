@@ -56,7 +56,6 @@ const ApplyModal = () => {
   };
 
   const onGetFileDone = (e) => {
-    console.log(e);
     if (!e.type?.includes("document") && !e.type?.includes("pdf"))
       return toast.error("File không hợp lệ");
     if (e.size > 5000) return toast.error("File quá lớn");
