@@ -53,8 +53,6 @@ const Home = () => {
     setJobs(jobFiltered);
   };
 
-  console.log(jobs);
-
   return (
     <Box>
       <Filter
