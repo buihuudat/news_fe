@@ -19,36 +19,41 @@ const Home = () => {
 
   const handleSearch = () => {
     let jobFiltered = data;
-    console.log(jobFiltered);
+
     if (searchQuery) {
-      jobFiltered = data.filter(
+      const queryLowerCase = searchQuery.toLowerCase();
+      jobFiltered = jobFiltered.filter(
         (job) =>
-          job.jobSkills.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          job?.company?.name
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
-          job.jobDescription.toLowerCase().includes(searchQuery.toLowerCase())
+          job.jobSkills.toLowerCase().includes(queryLowerCase) ||
+          job?.company?.name.toLowerCase().includes(queryLowerCase) ||
+          job.jobDescription.toLowerCase().includes(queryLowerCase)
       );
     }
+
     if (dataFilter.salary !== "") {
       jobFiltered = jobFiltered.filter(
         (job) => job.salary === dataFilter.salary
       );
     }
+
     if (dataFilter.scale !== "") {
       jobFiltered = jobFiltered.filter((job) => job.scale === dataFilter.scale);
     }
+
     if (dataFilter.workForm !== "") {
       jobFiltered = jobFiltered.filter(
         (job) => job.workForm === dataFilter.workForm
       );
     }
+
     if (dataFilter.time !== "") {
       jobFiltered = jobFiltered.filter((job) => job.time === dataFilter.time);
     }
-    console.log(dataFilter);
+
     setJobs(jobFiltered);
   };
+
+  console.log(jobs);
 
   return (
     <Box>
@@ -59,7 +64,7 @@ const Home = () => {
         dataFilter={dataFilter}
         setDataFilter={setDataFilter}
       />
-      {jobs.length ? (
+      {jobs?.length ? (
         <FilterData jobs={jobs} />
       ) : (
         <Box sx={{ background: "white", width: "100%", padding: 5 }}>
