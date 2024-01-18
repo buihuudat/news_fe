@@ -5,28 +5,37 @@ import FilterData from "../../components/home/FilterData";
 import ApplyModal from "../../components/ApplyModal";
 import NotificationModal from "../../components/NotificationModal";
 import { useGetJobsQuery } from "../../api/admin/adminApi";
+import JobNotFound from "../../components/home/JobNotFound";
+import home1 from "../../sources/home-1.png";
+import home2 from "../../sources/home-2.png";
+import home3 from "../../sources/home-3.png";
+import { useDispatch } from "react-redux";
+import { setJobSelected } from "../../slice/jobSlice";
 
 const Home = () => {
+  const { data } = useGetJobsQuery();
   const [jobs, setJobs] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const { data } = useGetJobsQuery();
+  const [onSearch, setOnSearch] = useState(false);
   const [dataFilter, setDataFilter] = useState({
     salary: "",
     scale: "",
-    workForm: "",
+    wotkingForm: "",
     time: "",
   });
 
+  const dispatch = useDispatch();
+
   const handleSearch = () => {
-    let jobFiltered = data;
+    let jobFiltered = [];
 
     if (searchQuery) {
       const queryLowerCase = searchQuery.toLowerCase();
-      jobFiltered = jobFiltered.filter(
+      jobFiltered = data.filter(
         (job) =>
           job.jobSkills.toLowerCase().includes(queryLowerCase) ||
-          job?.company?.name.toLowerCase().includes(queryLowerCase) ||
-          job.jobDescription.toLowerCase().includes(queryLowerCase)
+          job?.company?.name.toLowerCase().includes(queryLowerCase)
+        // job.jobDescription.toLowerCase().includes(queryLowerCase)
       );
     }
 
@@ -40,9 +49,10 @@ const Home = () => {
       jobFiltered = jobFiltered.filter((job) => job.scale === dataFilter.scale);
     }
 
-    if (dataFilter.workForm !== "") {
+    if (dataFilter.wotkingForm !== "Cả hai" && dataFilter.wotkingForm !== "") {
+      console.log(jobFiltered, dataFilter.wotkingForm);
       jobFiltered = jobFiltered.filter(
-        (job) => job.workForm === dataFilter.workForm
+        (job) => job.wotkingForm === dataFilter.wotkingForm
       );
     }
 
@@ -50,7 +60,12 @@ const Home = () => {
       jobFiltered = jobFiltered.filter((job) => job.time === dataFilter.time);
     }
 
+    if (jobFiltered.length) {
+      dispatch(setJobSelected(jobFiltered[0]));
+    }
+
     setJobs(jobFiltered);
+    setOnSearch(true);
   };
 
   return (
@@ -62,7 +77,9 @@ const Home = () => {
         dataFilter={dataFilter}
         setDataFilter={setDataFilter}
       />
-      {jobs?.length ? (
+      {!jobs.length && searchQuery !== "" && onSearch ? (
+        <JobNotFound />
+      ) : jobs?.length ? (
         <FilterData jobs={jobs} />
       ) : (
         <Box sx={{ background: "white", width: "100%", padding: 5 }}>
@@ -95,9 +112,7 @@ const Home = () => {
               }}
             >
               <img
-                src={
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBKIWAjDsCobecM0lfPBVsgQinMCxRkx2TFTqotbwYdCUzUAHw8KKjWalvLPzIIHkXMdI&usqp=CAU"
-                }
+                src={home1}
                 alt="im2"
                 style={{ height: 300, width: "auto", objectFit: "cover" }}
               />
@@ -115,7 +130,7 @@ const Home = () => {
               }}
             >
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBKIWAjDsCobecM0lfPBVsgQinMCxRkx2TFTqotbwYdCUzUAHw8KKjWalvLPzIIHkXMdI&usqp=CAU"
+                src={home2}
                 alt="im2"
                 style={{ height: 300, width: "auto", objectFit: "cover" }}
               />
@@ -133,7 +148,7 @@ const Home = () => {
               }}
             >
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBKIWAjDsCobecM0lfPBVsgQinMCxRkx2TFTqotbwYdCUzUAHw8KKjWalvLPzIIHkXMdI&usqp=CAU"
+                src={home3}
                 alt="im2"
                 style={{ height: 300, width: "auto", objectFit: "cover" }}
               />

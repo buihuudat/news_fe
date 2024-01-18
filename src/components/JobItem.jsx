@@ -6,14 +6,18 @@ import { useDeleteJobMutation } from "../api/admin/adminApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import {
   setAppliedModal,
   setCreateModal,
   setJobSelected,
 } from "../slice/jobSlice";
-import JobModal from "./JobModal";
+import moment from "moment";
+import "moment/locale/vi";
 
 const JobItem = (job) => {
+  moment.locale("vi");
+
   const { pathname } = useLocation();
   const company = job?.company;
 
@@ -71,22 +75,25 @@ const JobItem = (job) => {
 
   return (
     <Paper
+      elevation={5}
       sx={{
         width: 500,
         height: "max-content",
+
         display: "flex",
         flexDirection: "column",
         gap: 1,
         backgroundColor: "white",
         padding: 1,
+        m: 2,
+        borderRadius: 5,
+        border: `2px solid ${pathname.includes(job?._id) ? "red" : "white"}`,
       }}
     >
       <Box
         onClick={handleViewJob}
         sx={{
           padding: 2,
-          border: `2px solid ${pathname.includes(job?._id) ? "red" : "white"}`,
-          borderRadius: 5,
           width: "100%",
           height: "max-content",
           display: "flex",
@@ -95,8 +102,8 @@ const JobItem = (job) => {
           backgroundColor: "white",
         }}
       >
-        <Typography sx={{ fontSize: 20, fontWeight: "600" }}>
-          {job.jobTitle}
+        <Typography sx={{ fontSize: 25, fontWeight: "600" }}>
+          {job.jobTitle.toUpperCase()}
         </Typography>
 
         <Box
@@ -108,7 +115,7 @@ const JobItem = (job) => {
             onClick={handleViewCompany}
             style={{ cursor: "pointer" }}
           />
-          <Typography fontSize={25} pl={2}>
+          <Typography fontSize={20} pl={2}>
             {company?.name}
           </Typography>
         </Box>
@@ -142,7 +149,11 @@ const JobItem = (job) => {
             }}
           >
             <ApartmentIcon />
-            <Typography fontWeight={600}>{job.jobLocation}</Typography>
+            <Typography fontWeight={600}>
+              {job.jobLocation.length > 40
+                ? job.jobLocation.slice(0, 40) + "..."
+                : job.jobLocation}
+            </Typography>
           </Box>
           <Box
             sx={{
@@ -157,6 +168,19 @@ const JobItem = (job) => {
           </Box>
         </Box>
         <Divider />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <AccessTimeIcon />
+          <Typography fontWeight={600}>
+            {moment(job.createdAt).fromNow()}
+          </Typography>
+        </Box>
         <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
           {company?.skill?.map((skill, i) => (
             <Skill key={i} skill={skill} />
@@ -164,7 +188,9 @@ const JobItem = (job) => {
         </Box>
       </Box>
       {pathname.includes("admin") && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        <Box
+          sx={{ display: "flex", flexDirection: "column", gap: 1, mt: "auto" }}
+        >
           <Box display={"flex"} justifyContent={"space-between"}>
             <Button variant="outlined" color="error" onClick={handleDelete}>
               Delete

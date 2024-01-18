@@ -103,153 +103,146 @@ const JobModal = () => {
   };
 
   return (
-    <div>
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={style} component={"form"} onSubmit={handleSubmit}>
-          <Typography fontWeight={600} fontSize={25} align="center">
-            {dataUpdate ? "Cập nhật công việc" : "Thêm công việc mới"}
-          </Typography>
+    <Modal open={open} onClose={handleClose}>
+      <Box sx={style} component={"form"} onSubmit={handleSubmit}>
+        <Typography fontWeight={600} fontSize={25} align="center">
+          {dataUpdate ? "Cập nhật công việc" : "Thêm công việc mới"}
+        </Typography>
 
-          <FormControl fullWidth>
-            <InputLabel>Công ty</InputLabel>
-            <Select
-              value={dataUpdate?.company._id || company}
-              label="Công ty"
-              onChange={(e) => setCompany(e.target.value)}
+        <FormControl fullWidth>
+          <InputLabel>Công ty</InputLabel>
+          <Select
+            value={dataUpdate?.company._id || company}
+            label="Công ty"
+            onChange={(e) => setCompany(e.target.value)}
+          >
+            {companyData.data?.map((data, i) => (
+              <MenuItem value={data._id} key={i}>
+                {data.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <TextField
+          label="Tên công việc"
+          defaultValue={dataUpdate?.job?.jobTitle}
+          name="jobTitle"
+          fullWidth
+          required
+        />
+        <TextField
+          label="Thông tin công việc"
+          name="jobDescription"
+          defaultValue={dataUpdate?.job?.jobDescription}
+          fullWidth
+          multiline
+          required
+        />
+        <TextField
+          label="Địa điểm làm việc"
+          defaultValue={dataUpdate?.job?.jobLocation}
+          name="jobLocation"
+          required
+        />
+
+        <TextField
+          label="Kỹ năng cần có"
+          name="jobSkills"
+          defaultValue={dataUpdate?.job?.jobSkills}
+          placeholder="React, Node, PHP, ..."
+          required
+        />
+
+        <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+          <FormControl>
+            <FormLabel>Status</FormLabel>
+            <RadioGroup
+              value={value}
+              onChange={(e) => setValue(+e.target.value)}
             >
-              {companyData.data?.map((data, i) => (
-                <MenuItem value={data._id} key={i}>
-                  {data.name}
+              <FormControlLabel value={0} control={<Radio />} label="Active" />
+              <FormControlLabel
+                value={1}
+                control={<Radio />}
+                label="No Active"
+              />
+            </RadioGroup>
+          </FormControl>
+
+          <FormControl sx={{ width: 150 }}>
+            <InputLabel>Hình thức làm việc</InputLabel>
+            <Select
+              value={form}
+              label="Hình thức làm việc"
+              onChange={(e) => setForm(e.target.value)}
+            >
+              {data.workForm.map((data, i) => (
+                <MenuItem value={data.value} key={i}>
+                  {data.value}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-
-          <TextField
-            label="Tên công việc"
-            defaultValue={dataUpdate?.job?.jobTitle}
-            name="jobTitle"
-            fullWidth
-            required
-          />
-          <TextField
-            label="Thông tin công việc"
-            name="jobDescription"
-            defaultValue={dataUpdate?.job?.jobDescription}
-            fullWidth
-            multiline
-            required
-            rows={3}
-          />
-          <TextField
-            label="Địa điểm làm việc"
-            defaultValue={dataUpdate?.job?.jobLocation}
-            name="jobLocation"
-            required
-          />
-
-          <TextField
-            label="Kỹ năng cần có"
-            name="jobSkills"
-            defaultValue={dataUpdate?.job?.jobSkills}
-            placeholder="React, Node, PHP, ..."
-            required
-          />
-
-          <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
-            <FormControl>
-              <FormLabel>Status</FormLabel>
-              <RadioGroup
-                value={value}
-                onChange={(e) => setValue(+e.target.value)}
-              >
-                <FormControlLabel
-                  value={0}
-                  control={<Radio />}
-                  label="Active"
-                />
-                <FormControlLabel
-                  value={1}
-                  control={<Radio />}
-                  label="No Active"
-                />
-              </RadioGroup>
-            </FormControl>
-
-            <FormControl sx={{ width: 150 }}>
-              <InputLabel>Hình thức làm việc</InputLabel>
-              <Select
-                value={form}
-                label="Hình thức làm việc"
-                onChange={(e) => setForm(e.target.value)}
-              >
-                {data.workForm.map((data, i) => (
-                  <MenuItem value={data.value} key={i}>
-                    {data.value}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl sx={{ width: 150 }}>
-              <InputLabel>Thời gian làm việc</InputLabel>
-              <Select
-                value={time}
-                label="Hình thức làm việc"
-                onChange={(e) => setTime(e.target.value)}
-              >
-                {data.time.map((data, i) => (
-                  <MenuItem value={data.value} key={i}>
-                    {data.value}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl sx={{ width: 150 }}>
-              <InputLabel>Khoảng cách</InputLabel>
-              <Select
-                value={scale}
-                label="Hình thức làm việc"
-                onChange={(e) => setScale(e.target.value)}
-              >
-                {data.scale.map((data, i) => (
-                  <MenuItem value={data.value} key={i}>
-                    {data.value}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl sx={{ width: 150 }}>
-              <InputLabel>Mức lương</InputLabel>
-              <Select
-                value={salary}
-                label="Mức lương"
-                onChange={(e) => setSalary(e.target.value)}
-              >
-                {data.salary.map((data, i) => (
-                  <MenuItem value={data.value} key={i}>
-                    {data.value}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 2 }}>
-            <Button variant="contained" color="success" fullWidth type="submit">
-              Save
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleClose}
-              color="error"
-              fullWidth
+          <FormControl sx={{ width: 150 }}>
+            <InputLabel>Thời gian làm việc</InputLabel>
+            <Select
+              value={time}
+              label="Hình thức làm việc"
+              onChange={(e) => setTime(e.target.value)}
             >
-              Hủy
-            </Button>
-          </Box>
+              {data.time.map((data, i) => (
+                <MenuItem value={data.value} key={i}>
+                  {data.value}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl sx={{ width: 150 }}>
+            <InputLabel>Khoảng cách</InputLabel>
+            <Select
+              value={scale}
+              label="Hình thức làm việc"
+              onChange={(e) => setScale(e.target.value)}
+            >
+              {data.scale.map((data, i) => (
+                <MenuItem value={data.value} key={i}>
+                  {data.value}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl sx={{ width: 150 }}>
+            <InputLabel>Mức lương</InputLabel>
+            <Select
+              value={salary}
+              label="Mức lương"
+              onChange={(e) => setSalary(e.target.value)}
+            >
+              {data.salary.map((data, i) => (
+                <MenuItem value={data.value} key={i}>
+                  {data.value}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
-      </Modal>
-    </div>
+
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 2 }}>
+          <Button variant="contained" color="success" fullWidth type="submit">
+            Save
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleClose}
+            color="error"
+            fullWidth
+          >
+            Hủy
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
   );
 };
 

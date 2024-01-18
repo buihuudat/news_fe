@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { showModal } from "../slice/jobSlice";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const Skill = ({ name }) => {
   return (
@@ -16,6 +17,7 @@ const Skill = ({ name }) => {
         px: 1,
         borderRadius: 20,
         width: "max-content",
+        height: "max-content",
         border: "1px solid #000",
       }}
     >
@@ -36,19 +38,26 @@ const JobDetails = () => {
     dispatch(showModal({ show: true, data: jobSelected }));
   };
 
+  const [showFullDescription, setShowFullDescription] = useState(false);
+
+  const handleToggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
+  };
+
   return jobSelected ? (
     <Box
       sx={{
         border: "2px solid #999",
         padding: 2,
         borderRadius: 5,
-        minHeight: 500,
+        height: "100%",
         backgroundColor: "white",
+        overflow: "auto",
       }}
     >
       <Box sx={{ display: "flex", flexDirection: "row" }}>
         <Avatar
-          onClick={() => navigate(`/company/${jobSelected.company._id}`)}
+          onClick={() => navigate(`/company/${jobSelected.company?._id}`)}
           variant="square"
           alt="img-company"
           sx={{ width: 100, height: 100 }}
@@ -99,7 +108,7 @@ const JobDetails = () => {
         >
           <LocationOnIcon color="error" sx={{ fontSize: 30 }} />
           <Typography color={"red"} fontWeight={600}>
-            Cách {jobSelected.company?.scale} km
+            {jobSelected.jobLocation}
           </Typography>
         </Box>
         <Box
@@ -111,7 +120,7 @@ const JobDetails = () => {
           }}
         >
           <ApartmentIcon sx={{ fontSize: 30 }} />
-          <Typography fontWeight={600}>{jobSelected.jobLocation}</Typography>
+          <Typography fontWeight={600}>{jobSelected.company.name}</Typography>
         </Box>
         <Box
           sx={{
@@ -125,10 +134,17 @@ const JobDetails = () => {
           <Typography fontWeight={600}>{jobSelected.wotkingForm}</Typography>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
-          <Typography fontWeight={600} fontSize={20}>
+          <Typography fontWeight={600} fontSize={20} width={100}>
             Kỹ năng:
           </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 1,
+            }}
+          >
             {jobSelected.jobSkills?.split(",").map((skill, i) => (
               <Skill key={i} name={skill} />
             ))}
@@ -136,10 +152,26 @@ const JobDetails = () => {
         </Box>
 
         <Divider sx={{ pt: 2 }} />
+        <Typography fontSize={22} fontWeight={600}>
+          Mô tả công việc
+        </Typography>
+        <Typography component="li">
+          {showFullDescription
+            ? jobSelected.jobDescription
+            : jobSelected.jobDescription.length > 600
+            ? jobSelected.jobDescription.slice(0, 600) + "..."
+            : jobSelected.jobDescription}
+          {jobSelected.jobDescription.length > 600 && (
+            <Button onClick={handleToggleDescription}>
+              {showFullDescription ? "Thu gọn" : "Đọc thêm"}
+            </Button>
+          )}
+        </Typography>
+        <Divider sx={{ pt: 2 }} />
 
         <Box>
           <Typography fontSize={25} fontWeight={600}>
-            ten cong ty
+            {jobSelected.company.name}
           </Typography>
           <Box
             sx={{
@@ -161,7 +193,7 @@ const JobDetails = () => {
             <Box sx={{ width: "30%" }}>
               <Typography color={"#333"}>Quốc gia</Typography>
               <Typography fontWeight={600}>
-                {jobSelected.company?.country}
+                {jobSelected.company?.country.toUpperCase()}
               </Typography>
             </Box>
             <Box sx={{ width: "30%" }}>

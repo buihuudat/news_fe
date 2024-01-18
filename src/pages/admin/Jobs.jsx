@@ -15,8 +15,9 @@ const Popup = () => {
   return (
     <Box
       sx={{
-        height: "80%",
-        width: "100%",
+        position: "fixed",
+        bottom: 0,
+        right: 0,
       }}
     >
       <SpeedDial
@@ -45,6 +46,7 @@ const Jobs = () => {
         gap: 3,
         flexGrow: 1,
         flexWrap: "wrap",
+        justifyContent: "center",
       }}
     >
       {!isLoading && data?.map((job) => <JobItem key={job._id} {...job} />)}

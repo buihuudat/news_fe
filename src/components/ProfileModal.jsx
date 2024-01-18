@@ -28,7 +28,9 @@ const style = {
   boxShadow: 24,
   p: 4,
   minWidth: 500,
+  height: 800,
   borderRadius: 5,
+  overflow: "auto",
 };
 
 const ProfileModal = () => {
@@ -204,7 +206,7 @@ const ProfileModal = () => {
               label="Link cá nhân"
               required
               name="social"
-              defaultValue={user?.dayOfBirth}
+              defaultValue={user?.social}
               sx={{ width: "45%" }}
             />
           </Box>
@@ -213,7 +215,6 @@ const ProfileModal = () => {
             <Divider />
             <TextField
               multiline
-              rows={2}
               name="description"
               defaultValue={user?.description}
               fullWidth

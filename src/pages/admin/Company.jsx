@@ -11,8 +11,16 @@ const Company = () => {
   return isLoading ? (
     <LinearProgress />
   ) : (
-    <Box>
-      <Box p={2} sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+    <Box height={"100%"}>
+      <Box
+        p={2}
+        sx={{
+          display: "flex",
+          gap: 3,
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
         {data.length &&
           data.map((company) => <CompanyItem key={company._id} {...company} />)}
       </Box>

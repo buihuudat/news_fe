@@ -1,5 +1,5 @@
 import { Box, LinearProgress } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { useDispatch } from "react-redux";
@@ -10,16 +10,16 @@ import { useCheckAuthMutation } from "../../api/user/userApi";
 const AppLayout = () => {
   const [checkAuth, { isLoading }] = useCheckAuthMutation();
   const dispatch = useDispatch();
-  const checkUser = async () => {
-    const result = await checkAuth();
-    if (result.data?.user) {
-      dispatch(setUser(result.data.user));
-    }
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const checkUser = async () => {
+      const result = await checkAuth();
+      if (!result.data) return navigate("/");
+      dispatch(setUser(result.data.user));
+    };
     checkUser();
-  }, []);
+  }, [dispatch, navigate, checkAuth]);
   return isLoading ? (
     <LinearProgress />
   ) : (

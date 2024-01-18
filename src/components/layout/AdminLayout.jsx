@@ -36,7 +36,6 @@ const AdminLayout = () => {
     <Box
       sx={{
         background: `linear-gradient(to right, black, #540509)`,
-        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
       }}
@@ -55,10 +54,7 @@ const AdminLayout = () => {
           <Sider />
         </Box>
 
-        <Box
-          component="main"
-          sx={{ flexGrow: 1, height: "100vh", overflow: "auto" }}
-        >
+        <Box sx={{ flexGrow: 1, overflow: "auto", height: "100vh" }}>
           <Outlet />
         </Box>
       </Box>

@@ -12,8 +12,9 @@ const Popup = () => {
   return (
     <Box
       sx={{
-        height: "80%",
-        width: "100%",
+        position: "fixed",
+        bottom: 0,
+        right: 0,
       }}
     >
       <SpeedDial

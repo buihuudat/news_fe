@@ -31,8 +31,8 @@ const Sider = () => {
   ];
 
   const { pathname } = useLocation();
-
   const navigate = useNavigate();
+
   return (
     <Box sx={{ display: "flex", width: 300, height: "100vh" }}>
       <List sx={{ bgcolor: "background.paper", width: 300 }} component="nav">

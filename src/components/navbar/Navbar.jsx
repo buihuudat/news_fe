@@ -17,8 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../slice/userSlice";
 import moment from "moment";
-import CloseIcon from "@mui/icons-material/Close";
 import { useGetNotificationsQuery } from "../../api/user/userApi";
+import { useUpdateSeenMutation } from "../../api/user/notification";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -28,6 +28,7 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const { data } = useGetNotificationsQuery({ userId: user?._id });
+  const [updateSeen] = useUpdateSeenMutation();
 
   const notifications = data?.notifications?.notifications;
 
@@ -45,10 +46,17 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
   const handleLogout = () => {
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
     dispatch(setUser(null));
     navigate("/");
+  };
+
+  moment.locale("vi");
+
+  const handleViewNotification = (id) => {
+    navigate("/applied");
+    updateSeen(id);
   };
 
   return (
@@ -58,7 +66,7 @@ const Navbar = () => {
         flexDirection: "row",
         justifyContent: "space-between",
         p: 2,
-        px: 10,
+        px: 5,
         position: "fixed",
         background: `linear-gradient(to right, black, #540509)`,
         width: "100%",
@@ -116,7 +124,7 @@ const Navbar = () => {
             </Menu>
           </Box>
 
-          <IconButton onClick={() => setShowNoti(true)}>
+          <IconButton onClick={() => setShowNoti(!showNoti)}>
             <Badge badgeContent={notifications?.length} color="error">
               <NotificationsIcon sx={{ color: "white" }} />
             </Badge>
@@ -172,9 +180,6 @@ const Navbar = () => {
             <Typography fontWeight={600} fontSize={18}>
               Thông báo
             </Typography>
-            <IconButton onClick={() => setShowNoti(false)}>
-              <CloseIcon />
-            </IconButton>
           </Box>
           <Divider />
           <Box
@@ -184,18 +189,23 @@ const Navbar = () => {
             }}
           >
             {notifications?.map((data) => (
-              <Box key={data._id}>
+              <Paper
+                key={data._id}
+                onClick={() => handleViewNotification(data._id)}
+                sx={{ cursor: "pointer" }}
+                elevation={5}
+              >
                 <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
-                    gap: 4,
+                    gap: 3,
                   }}
                 >
                   <Typography fontWeight={600}>{data.title}</Typography>
                   <Typography fontWeight={600}>
-                    {moment(data.createdAt).format("l")}
+                    {moment(data.createdAt).format("lll")}
                   </Typography>
                 </Box>
                 <Typography>{data.companyName}</Typography>
@@ -204,7 +214,7 @@ const Navbar = () => {
                   Vui lòng chờ phản hồi phía doanh nghiệp qua email đã đăng kí
                 </Typography>
                 <Divider />
-              </Box>
+              </Paper>
             ))}
           </Box>
         </Paper>

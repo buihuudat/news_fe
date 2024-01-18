@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseUrl } from "../intex";
 
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://internship-gpdp.onrender.com/api/v1/user",
-    // baseUrl: "http://localhost:5000/api/v1/user",
+    baseUrl: `${baseUrl}/api/v1/user`,
     prepareHeaders: async (headers) => {
       const token = localStorage.getItem("token");
       if (token) {
@@ -38,15 +38,15 @@ export const userApi = createApi({
       invalidatesTags: ["user", "job"],
     }),
     cvApplied: builder.query({
-      query: ({ userId }) => ({
-        url: `/${userId}/cv-applied`,
+      query: () => ({
+        url: `/cv-applied`,
         method: "GET",
       }),
       providesTags: ["user", "job"],
     }),
     getNotifications: builder.query({
-      query: ({ userId }) => ({
-        url: `/notifications/${userId}`,
+      query: () => ({
+        url: `/notifications`,
         method: "GET",
       }),
       providesTags: ["user", "notification"],
@@ -65,6 +65,12 @@ export const userApi = createApi({
         body: data,
       }),
     }),
+    getJobsApplied: builder.query({
+      query: () => ({
+        url: `/job-applied`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -73,6 +79,7 @@ export const {
   useUpdateUserMutation,
   useJobApplyMutation,
   useCvAppliedQuery,
+  useGetJobsAppliedQuery,
   useGetNotificationsQuery,
   usePushNotificationMutation,
   useDeleteNotificationMutation,

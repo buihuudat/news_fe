@@ -19,6 +19,7 @@ import {
   useJobApplyMutation,
   usePushNotificationMutation,
 } from "../api/user/userApi";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -34,6 +35,8 @@ const style = {
 
 const ApplyModal = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [textMore, setTextMore] = useState("");
   const [nameOfUser, setNameOfUser] = useState("");
   const [options, setOptions] = useState("Sử dụng CV đã UpLoad");
@@ -93,6 +96,7 @@ const ApplyModal = () => {
         pushNotification(dataNoti);
         handleClose();
         dispatch(notificationModal({ show: true }));
+        navigate("/applied");
       });
   };
 

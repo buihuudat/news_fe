@@ -10,6 +10,7 @@ import Users from "./pages/admin/Users";
 import Jobs from "./pages/admin/Jobs";
 import Company from "./pages/admin/Company";
 import CompanyPage from "./pages/Company";
+import Applied from "./pages/Applied";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
       {
         path: "/tai-khoan",
         element: <Profile />,
+      },
+      {
+        path: "/applied",
+        element: <Applied />,
       },
     ],
   },

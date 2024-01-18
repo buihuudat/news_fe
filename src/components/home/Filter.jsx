@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { data } from "../../sources/data";
+import { useId } from "react";
 
 const SelectActions = ({
   name,
@@ -18,9 +19,18 @@ const SelectActions = ({
   dataFilter,
   setDataFilter,
 }) => {
+  const id = useId();
   return (
-    <FormControl sx={{ background: "white", width: "30%", borderRadius: 2 }}>
+    <FormControl sx={{ background: "white", borderRadius: 2 }} fullWidth>
       <InputLabel>{name}</InputLabel>
+      <InputLabel
+        htmlFor={id}
+        sx={{
+          color: "red",
+        }}
+      >
+        {name}
+      </InputLabel>
       <Select
         value={dataFilter[keyName]}
         label={name}
@@ -30,6 +40,10 @@ const SelectActions = ({
             [keyName]: e.target.value,
           }))
         }
+        inputProps={{
+          name: { id },
+          id: id,
+        }}
       >
         {data.map((v, i) => (
           <MenuItem value={v.value} key={i}>
@@ -56,7 +70,7 @@ const Filter = ({
         flexDirection: "row",
         width: "100%",
         justifyContent: "space-between",
-        gap: 5,
+        gap: 3,
       }}
     >
       <Button
@@ -73,7 +87,12 @@ const Filter = ({
         }}
       >
         <LocationOnIcon sx={{ color: "black", fontSize: "16" }} />
-        <Typography color={"black"} fontWeight={600} fontSize={25}>
+        <Typography
+          color={"black"}
+          fontWeight={600}
+          fontSize={25}
+          width={"60%"}
+        >
           ABC
         </Typography>
       </Button>
@@ -82,44 +101,54 @@ const Filter = ({
           display: "flex",
           flexDirection: "row",
           flexWrap: "wrap",
-          gap: 5,
+          gap: 3,
           flex: 1,
         }}
       >
-        <TextField
-          placeholder="Nhập từ khóa kỹ năng, công ty,..."
-          onChange={(e) => setSearchQuery(e.target.value)}
-          value={searchQuery}
-          sx={{ width: "63%", backgroundColor: "white", borderRadius: 2 }}
-        />
-        <SelectActions
-          name="Mức lương"
-          keyName="salary"
-          data={data.salary}
-          dataFilter={dataFilter}
-          setDataFilter={setDataFilter}
-        />
-        <SelectActions
-          name="Khoảng cách"
-          data={data.scale}
-          dataFilter={dataFilter}
-          setDataFilter={setDataFilter}
-          keyName={"scale"}
-        />
-        <SelectActions
-          name="Hình thức làm việc"
-          data={data.workForm}
-          dataFilter={dataFilter}
-          setDataFilter={setDataFilter}
-          keyName={"wotkingForm"}
-        />
-        <SelectActions
-          name="Thời gian"
-          data={data.time}
-          dataFilter={dataFilter}
-          setDataFilter={setDataFilter}
-          keyName={"time"}
-        />
+        <Box sx={{ width: "100%", display: "flex", gap: 2 }}>
+          <TextField
+            placeholder="Nhập từ khóa kỹ năng, công ty,..."
+            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchQuery}
+            sx={{ width: "70%", backgroundColor: "white", borderRadius: 2 }}
+          />
+          <Box sx={{ width: "30%" }}>
+            <SelectActions
+              name="Mức lương"
+              keyName="salary"
+              data={data.salary}
+              dataFilter={dataFilter}
+              setDataFilter={setDataFilter}
+            />
+          </Box>
+        </Box>
+        <Box sx={{ width: "100%", display: "flex", gap: 2 }}>
+          <Box sx={{ width: "70%", display: "flex", gap: 2 }}>
+            <SelectActions
+              name="Khoảng cách"
+              data={data.scale}
+              dataFilter={dataFilter}
+              setDataFilter={setDataFilter}
+              keyName={"scale"}
+            />
+            <SelectActions
+              name="Hình thức làm việc"
+              data={data.workForm}
+              dataFilter={dataFilter}
+              setDataFilter={setDataFilter}
+              keyName={"wotkingForm"}
+            />
+          </Box>
+          <Box sx={{ width: "30%" }}>
+            <SelectActions
+              name="Thời gian"
+              data={data.time}
+              dataFilter={dataFilter}
+              setDataFilter={setDataFilter}
+              keyName={"time"}
+            />
+          </Box>
+        </Box>
       </Box>
       <Button
         sx={{

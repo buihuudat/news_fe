@@ -1,12 +1,4 @@
-import { faker } from "@faker-js/faker";
-import {
-  Box,
-  Divider,
-  LinearProgress,
-  Link,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, LinearProgress, Paper, Typography } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import BookmarksIcon from "@mui/icons-material/Bookmarks";
 import JobItem from "../../components/JobItem";
@@ -18,7 +10,7 @@ import {
   useGetCompanyJobsQuery,
 } from "../../api/admin/adminApi";
 
-const index = () => {
+const Company = () => {
   const param = useParams();
   const { data: jobsOfCompany } = useGetCompanyJobsQuery({ id: param?.id });
   const {
@@ -84,16 +76,17 @@ const index = () => {
           display: "flex",
           width: "100%",
           justifyContent: "center",
+          gap: 5,
+          px: 5,
         }}
       >
         <Box
           sx={{
-            px: 10,
             py: 3,
             width: "70%",
             display: "flex",
             flexDirection: "column",
-            gap: 5,
+            gap: 2,
           }}
         >
           <Paper>
@@ -237,7 +230,6 @@ const index = () => {
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            p: 2,
           }}
         >
           {jobsOfCompany?.map((job) => (
@@ -249,4 +241,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Company;

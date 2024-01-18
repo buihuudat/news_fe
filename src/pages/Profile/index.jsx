@@ -1,4 +1,12 @@
-import { Avatar, Box, Divider, IconButton, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Divider,
+  IconButton,
+  LinearProgress,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -10,9 +18,12 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { setModal } from "../../slice/userSlice";
 import ProfileModal from "../../components/ProfileModal";
 import moment from "moment";
+import { useCheckAuthMutation } from "../../api/user/userApi";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
+
+  const [checkAuth, { isLoading }] = useCheckAuthMutation();
 
   const dispatch = useDispatch();
 
@@ -20,7 +31,9 @@ const Profile = () => {
     dispatch(setModal({ show: true }));
   };
 
-  return (
+  return isLoading || !user ? (
+    <LinearProgress />
+  ) : (
     <Box>
       <Box sx={{ width: "100%", background: "white", padding: 3 }}>
         <Typography fontWeight={600} color={"red"} fontSize={25}>
@@ -37,18 +50,20 @@ const Profile = () => {
           justifyContent: "center",
           flexDirection: "column",
           gap: 5,
+          py: 5,
         }}
       >
-        <Box
+        <Paper
           sx={{
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             backgroundColor: "white",
             padding: 5,
-            width: 500,
+            width: 700,
             borderRadius: 5,
           }}
+          elevation={9}
         >
           <Box
             sx={{
@@ -67,9 +82,13 @@ const Profile = () => {
                 pb: 2,
               }}
             >
-              <Avatar src={user?.avatar} alt="avt-user" />
+              <Avatar
+                src={user?.avatar}
+                sx={{ width: 80, height: 80 }}
+                alt="avt-user"
+              />
               <Typography fontWeight={600} fontSize={23}>
-                {user?.name || user?.username}
+                {user?.name?.toUpperCase() || user?.username?.toUpperCase()}
               </Typography>
             </Box>
             <IconButton onClick={handleEdit}>
@@ -80,10 +99,11 @@ const Profile = () => {
             sx={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent: "space-around",
+              padding: 3,
             }}
           >
-            <Box>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <MailOutlineIcon />
                 <Typography>{user?.email}</Typography>
@@ -91,17 +111,19 @@ const Profile = () => {
 
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <PhoneIcon />
-                <Typography>{user?.phone}</Typography>
+                <Typography>{user?.phone || "Chưa cung cấp"}</Typography>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <LocationOnIcon />
-                <Typography>{user?.address}</Typography>
+                <Typography>{user?.address || "Chưa cung cấp"}</Typography>
               </Box>
             </Box>
-            <Box>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <PersonIcon />
-                <Typography>{user?.gender}</Typography>
+                <Typography>
+                  {user?.gender === "male" ? "Nam" : "Nữ"}
+                </Typography>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <CardGiftcardIcon />
@@ -113,15 +135,18 @@ const Profile = () => {
               </Box>
             </Box>
           </Box>
-        </Box>
+        </Paper>
 
-        <Box
-          sx={{ background: "#fff", padding: 5, width: 500, borderRadius: 5 }}
+        <Paper
+          elevation={9}
+          sx={{ background: "#fff", width: 700, borderRadius: 5 }}
         >
-          <Typography fontWeight={600}>Giới thiệu bản thân</Typography>
-          <Divider />
-          <Typography>{user?.description}</Typography>
-        </Box>
+          <Typography fontWeight={600} p={3} fontSize={23}>
+            Giới thiệu bản thân
+          </Typography>
+          <Divider sx={{ width: "100%" }} />
+          <Typography p={3}>{user?.description}</Typography>
+        </Paper>
       </Box>
       <ProfileModal />
     </Box>

@@ -34,6 +34,7 @@ const CompanyModal = () => {
   const [image, setImage] = useState(dataUpdate?.image || undefined);
   const dispatch = useDispatch();
   const handleClose = () => {
+    setImage("");
     dispatch(setModal({ show: false, data: null }));
   };
   const [deleteCompany] = useDeleteCompanyMutation();
@@ -62,6 +63,7 @@ const CompanyModal = () => {
     gap: 5,
     justifyContent: "space-between",
     flexWrap: "wrap",
+    height: "80%",
   };
 
   const handleSubmit = async (e) => {
@@ -98,157 +100,155 @@ const CompanyModal = () => {
   };
 
   return (
-    <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Box
-            component={"form"}
-            onSubmit={handleSubmit}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 10,
-              overflow: "auto",
-              maxHeight: "100%",
-            }}
-          >
-            <Typography fontWeight={600} fontSize={25} align="center">
-              {dataUpdate ? "Chỉnh sửa thông tin" : "Thêm công ty mới"}
-            </Typography>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style}>
+        <Box
+          component={"form"}
+          onSubmit={handleSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+            overflow: "auto",
+            maxHeight: "100%",
+          }}
+        >
+          <Typography fontWeight={600} fontSize={25} align="center">
+            {dataUpdate ? "Chỉnh sửa thông tin" : "Thêm công ty mới"}
+          </Typography>
 
-            <Box>
-              {image && image !== "" && (
-                <img
-                  src={image}
-                  alt="img-company"
-                  style={{ margin: "0 auto", display: "flex", width: 200 }}
-                />
-              )}
-              <FileBase64 onDone={handleDone} />
-            </Box>
-
-            <TextField
-              label="Tên công ty"
-              name="name"
-              fullWidth
-              required
-              defaultValue={dataUpdate?.name}
-            />
-            <TextField
-              label="Địa chỉ"
-              name="address"
-              fullWidth
-              required
-              defaultValue={dataUpdate?.address}
-            />
-            <TextField
-              label="Giới thiệu công ty"
-              name="description"
-              defaultValue={dataUpdate?.description}
-              multiline
-              required
-              rows={3}
-              fullWidth
-            />
-            <Box display={"flex"} gap={3}>
-              <TextField
-                label="Quy mô"
-                name="scale"
-                required
-                defaultValue={dataUpdate?.scale}
+          <Box>
+            {image && image !== "" && (
+              <img
+                src={image}
+                alt="img-company"
+                style={{ margin: "0 auto", display: "flex", width: 200 }}
               />
-              <TextField
-                label="Quốc gia"
-                name="country"
-                required
-                defaultValue={dataUpdate?.country}
-              />
-              <TextField
-                label="Website"
-                name="website"
-                required
-                defaultValue={dataUpdate?.website}
-              />
-              <TextField
-                label="Facebook"
-                name="facebook"
-                required
-                defaultValue={dataUpdate?.social}
-              />
-            </Box>
-
-            <FormControl>
-              <FormLabel>Tăng ca</FormLabel>
-              <RadioGroup
-                value={value}
-                onChange={(e) => setValue(+e.target.value)}
-              >
-                <FormControlLabel
-                  value={0}
-                  control={<Radio />}
-                  label="Không tăng ca"
-                />
-                <FormControlLabel
-                  value={1}
-                  control={<Radio />}
-                  label="Có tăng ca"
-                />
-              </RadioGroup>
-            </FormControl>
-
-            <Box
-              sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 2 }}
-            >
-              <Button
-                variant="contained"
-                color="success"
-                fullWidth
-                type="submit"
-              >
-                Save
-              </Button>
-              <Button
-                variant="contained"
-                onClick={handleClose}
-                color="error"
-                fullWidth
-              >
-                Hủy
-              </Button>
-              {dataUpdate && (
-                <Button
-                  variant="outlined"
-                  onClick={handleDelete}
-                  color="error"
-                  fullWidth
-                  disabled={data?.length}
-                >
-                  {data?.length > 0 ? (
-                    <i>
-                      <b>Cần Xóa hết Công việc trước khi xóa công ty</b>
-                    </i>
-                  ) : (
-                    "Delete"
-                  )}
-                </Button>
-              )}
-            </Box>
+            )}
+            <FileBase64 onDone={handleDone} />
           </Box>
 
-          {dataUpdate?._id && (
-            <Box>
-              {data?.length > 0 &&
-                data?.map((job) => <JobItem key={job._id} {...job} />)}
-            </Box>
-          )}
+          <TextField
+            label="Tên công ty"
+            name="name"
+            fullWidth
+            required
+            defaultValue={dataUpdate?.name}
+          />
+          <TextField
+            label="Địa chỉ"
+            name="address"
+            fullWidth
+            required
+            defaultValue={dataUpdate?.address}
+          />
+          <TextField
+            label="Giới thiệu công ty"
+            name="description"
+            defaultValue={dataUpdate?.description}
+            multiline
+            required
+            fullWidth
+          />
+          <Box display={"flex"} gap={3}>
+            <TextField
+              label="Quy mô"
+              name="scale"
+              required
+              defaultValue={dataUpdate?.scale}
+            />
+            <TextField
+              label="Quốc gia"
+              name="country"
+              required
+              defaultValue={dataUpdate?.country}
+            />
+            <TextField
+              label="Website"
+              name="website"
+              required
+              defaultValue={dataUpdate?.website}
+            />
+            <TextField
+              label="Facebook"
+              name="facebook"
+              required
+              defaultValue={dataUpdate?.social}
+            />
+          </Box>
+
+          <FormControl>
+            <FormLabel>Tăng ca</FormLabel>
+            <RadioGroup
+              value={value}
+              onChange={(e) => setValue(+e.target.value)}
+            >
+              <FormControlLabel
+                value={0}
+                control={<Radio />}
+                label="Không tăng ca"
+              />
+              <FormControlLabel
+                value={1}
+                control={<Radio />}
+                label="Có tăng ca"
+              />
+            </RadioGroup>
+          </FormControl>
+
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 2 }}>
+            <Button variant="contained" color="success" fullWidth type="submit">
+              Save
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleClose}
+              color="error"
+              fullWidth
+            >
+              Hủy
+            </Button>
+            {dataUpdate && (
+              <Button
+                variant="outlined"
+                onClick={handleDelete}
+                color="error"
+                fullWidth
+                disabled={data?.length}
+              >
+                {data?.length > 0 ? (
+                  <i>
+                    <b>Cần Xóa hết Công việc trước khi xóa công ty</b>
+                  </i>
+                ) : (
+                  "Delete"
+                )}
+              </Button>
+            )}
+          </Box>
         </Box>
-      </Modal>
-    </div>
+
+        {dataUpdate?._id && (
+          <Box
+            sx={{
+              height: "100%",
+              overflow: "auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            {data?.length > 0 &&
+              data?.map((job) => <JobItem key={job._id} {...job} />)}
+          </Box>
+        )}
+      </Box>
+    </Modal>
   );
 };
 

@@ -12,15 +12,14 @@ const AuthLayout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const checkUser = async () => {
-    const result = await checkAuth();
-    if (!result.data) return navigate("/");
-    dispatch(setUser(result.data.user));
-  };
-
   useEffect(() => {
+    const checkUser = async () => {
+      const result = await checkAuth();
+      if (!result.data) return navigate("/");
+      dispatch(setUser(result.data.user));
+    };
     checkUser();
-  }, []);
+  }, [dispatch, navigate, checkAuth]);
   return isLoading ? (
     <LinearProgress />
   ) : (
